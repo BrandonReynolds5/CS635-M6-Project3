@@ -9,7 +9,7 @@ Leo Paredes, Brandon Reynolds
 ---
 ## Running the Interpreter
 
-You can run the interpreter from the `src` directory by passing a turtle program file as a command line argument. All turtle programs can be found in the 'turtle_programs' directory. 
+You can run the interpreter from the root directory by passing a turtle program file as a command line argument. All turtle programs can be found in the 'turtle_programs' directory. 
 
 ### Basic Usage
 
