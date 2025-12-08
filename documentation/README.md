@@ -7,6 +7,19 @@ This repository contains the implementation and supporting files for CS635 Modul
 Leo Paredes, Brandon Reynolds
 
 ---
+## Running the Interpreter
+
+You can run the interpreter from the `src` directory by passing a turtle program file as a command line argument. All turtle programs can be found in the 'turtle_programs' directory. 
+
+### Basic Usage
+
+python main.py <turtle_program>
+
+### Example
+python main.py turtle_programs/square.txt
+
+### Running Without Arguments 
+If you run the interpreter without providing a program file, a simple demo program will be executed automatically. 
 
 ## Running the Test Suite
 
@@ -25,5 +38,5 @@ pip install pytest
 ### 4. Run the tests
 pytest -v
 
-### Generating an HTML Test Report
+### Generating a HTML Test Report
 pytest --html=report.html

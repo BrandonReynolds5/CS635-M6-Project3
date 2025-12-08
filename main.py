@@ -1,11 +1,11 @@
 # main.py
 import sys
-from .lexer import tokenize
-from .parser import Parser
-from .interpreter import Interpreter
-from .turtle_core import MockTurtle
-from .visitors import MementoVisitor, DistanceVisitor
-from .framework_integration import RealTurtleAdapter
+from src.lexer import tokenize
+from src.parser import Parser
+from src.interpreter import Interpreter
+from src.turtle_core import MockTurtle
+from src.visitors import MementoVisitor, DistanceVisitor
+from src.framework_integration import RealTurtleAdapter
 
 
 def run_program_text(source: str):
