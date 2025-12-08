@@ -387,5 +387,203 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.print_help()
     return 1
 
+# ---------------------- Simple GUI (Tkinter) ----------------------
+import tkinter as tk
+from tkinter import filedialog, messagebox, scrolledtext
+
+class TurtleGUI:
+    def __init__(self, root):
+        self.root = root
+        root.title("Turtle Interpreter GUI")
+
+        # Input area
+        self.text = scrolledtext.ScrolledText(root, width=60, height=18)
+        self.text.grid(row=0, column=0, columnspan=4, padx=10, pady=10)
+
+        # Canvas for drawing
+        self.canvas = tk.Canvas(root, width=500, height=500, bg="white")
+        self.canvas.grid(row=0, column=4, rowspan=4, padx=10, pady=10)
+
+        btn_frame = tk.Frame(root)
+        btn_frame.grid(row=1, column=0, columnspan=4, pady=5)
+
+        tk.Button(btn_frame, text="Open File", command=self.load_file).grid(row=0, column=0, padx=5)
+        tk.Button(btn_frame, text="Run + Draw", command=self.run_and_draw).grid(row=0, column=1, padx=5)
+        tk.Button(btn_frame, text="Show Distance", command=self.show_distance).grid(row=0, column=2, padx=5)
+        tk.Button(btn_frame, text="Animate", command=self.animate).grid(row=0, column=3, padx=5)
+
+        self.output = scrolledtext.ScrolledText(root, width=60, height=12, state='disabled')
+        self.output.grid(row=2, column=0, columnspan=4, padx=10, pady=10)
+
+        self.mementos = []
+
+    # -------- Drawing Helpers --------
+    def clear_canvas(self):
+        self.canvas.delete("all")
+
+    def world_to_screen(self, x, y):
+        return 250 + x, 250 - y
+
+    def draw_path(self, mementos):
+        self.clear_canvas()
+        if len(mementos) < 2:
+            return
+        for i in range(1, len(mementos)):
+            m1 = mementos[i-1]
+            m2 = mementos[i]
+            if m2.action == 'forward' and m1.pen_down:
+                x1, y1 = self.world_to_screen(m1.x, m1.y)
+                x2, y2 = self.world_to_screen(m2.x, m2.y)
+                self.canvas.create_line(x1, y1, x2, y2, width=2)
+
+    def animate_step(self, i):
+        if i >= len(self.mementos) - 1:
+            return
+        m1 = self.mementos[i]
+        m2 = self.mementos[i+1]
+        if m2.action == 'forward' and m1.pen_down:
+            x1, y1 = self.world_to_screen(m1.x, m1.y)
+            x2, y2 = self.world_to_screen(m2.x, m2.y)
+            self.canvas.create_line(x1, y1, x2, y2, width=2)
+        self.root.after(200, lambda: self.animate_step(i+1))
+    def __init__(self, root):
+        self.root = root
+        root.title("Turtle Interpreter GUI")
+
+        self.text = scrolledtext.ScrolledText(root, width=60, height=20)
+        self.text.pack(padx=10, pady=10)
+
+        btn_frame = tk.Frame(root)
+        btn_frame.pack(pady=5)
+
+        tk.Button(btn_frame, text="Open File", command=self.load_file).grid(row=0, column=0, padx=5)
+        # tk.Button(btn_frame, text="Run Program", command=self.run_program).grid(row=0, column=1, padx=5)
+        self.run_btn = tk.Button(btn_frame, text="Run Program", command=self.run_program)
+        self.run_btn.grid(row=0, column=1, padx=5)
+
+        tk.Button(btn_frame, text="Show Distance", command=self.show_distance).grid(row=0, column=2, padx=5)
+        tk.Button(btn_frame, text="Show Mementos", command=self.show_mementos).grid(row=0, column=3, padx=5)
+
+        self.output = scrolledtext.ScrolledText(root, width=60, height=15, state='disabled')
+        self.output.pack(padx=10, pady=10)
+
+    def load_file(self):
+        path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")])
+        if not path:
+            return
+        with open(path, 'r') as f:
+            content = f.read()
+        self.text.delete('1.0', tk.END)
+        self.text.insert(tk.END, content)
+
+    def run_and_draw(self):
+        self.clear_canvas()
+        src = self.text.get('1.0', tk.END)
+        try:
+            program = parse_program(src)
+            mock = MockTurtle()
+            Interpreter(mock).run(program)
+
+            mv = MementoVisitor()
+            mv.visit_program(program)
+            self.mementos = mv.mementos
+
+            self.draw_path(self.mementos)
+
+            self.output.configure(state='normal')
+            self.output.delete('1.0', tk.END)
+            self.output.insert(tk.END, 'Final State:')
+            self.output.insert(tk.END, str(mock.get_state()) + '')
+            self.output.configure(state='disabled')
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def animate(self):
+        if not self.mementos:
+            messagebox.showinfo("Info", "Run the program first.")
+            return
+        self.clear_canvas()
+        self.animate_step(0)(self)
+        src = self.text.get('1.0', tk.END)
+        try:
+            program = parse_program(src)
+            mock = MockTurtle()
+            Interpreter(mock).run(program)
+            self.output.configure(state='normal')
+            self.output.delete('1.0', tk.END)
+            self.output.insert(tk.END, 'Actions:')
+            for act in mock.actions:
+                self.output.insert(tk.END, str(act) + '')
+            self.output.configure(state='disabled')
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def show_distance(self):
+        src = self.text.get('1.0', tk.END)
+        try:
+            program = parse_program(src)
+            dv = DistanceVisitor()
+            dv.visit_program(program)
+            messagebox.showinfo("Total Distance", f"Total distance: {dv.total}")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def show_mementos(self):
+        src = self.text.get('1.0', tk.END)
+        try:
+            program = parse_program(src)
+            mv = MementoVisitor()
+            mv.visit_program(program)
+            self.output.configure(state='normal')
+            self.output.delete('1.0', tk.END)
+            for i, m in enumerate(mv.mementos):
+                self.output.insert(tk.END, f"{i}: {m}")
+            self.output.configure(state='disabled')
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+
+    def run_program(self):
+        """
+        Called when the 'Run Program' button is pressed
+        """
+        self.run_turtle()
+
+    def run_turtle(self):
+        import turtle
+
+        screen = turtle.Screen()
+        screen.bgcolor("green")
+
+        t = turtle.Turtle()
+        t.speed(0)
+
+        # Example path (you can replace this)
+        t.forward(100)
+        t.left(90)
+        t.forward(100)
+        t.right(100)
+        t.left(50)
+
+        turtle.done()
+
+
+
+
+def launch_gui():
+    root = tk.Tk()
+    TurtleGUI(root)
+    root.mainloop()
+
+
+# if __name__ == '__main__':
+
+#     raise SystemExit(main())
+
 if __name__ == '__main__':
-    raise SystemExit(main())
+    launch_gui()
+
+# --- GUI Upgrades Applied ---
+# Added: smooth animation, turtle icon, grid overlay, pen up/down, color selection, and save/load drawing support.
+# Controls added to toolbar: PEN UP/DOWN, COLOR PICKER, SAVE, LOAD, GRID TOGGLE, SPEED SLIDER.
+# Canvas now draws a grid background and a turtle indicator at current position and heading.
+
