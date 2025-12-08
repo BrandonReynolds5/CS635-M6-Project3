@@ -1,6 +1,6 @@
 # parser.py
 
-from ast_nodes import Forward, Left, Right, PenUp, PenDown, Repeat
+from .ast_nodes import Forward, Left, Right, PenUp, PenDown, Repeat
 
 class Parser:
     def __init__(self, tokens):

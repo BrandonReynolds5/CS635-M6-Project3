@@ -1,12 +1,12 @@
 # main.py
-
 import sys
-from lexer import tokenize
-from parser import Parser
-from interpreter import Interpreter
-from turtle_core import MockTurtle
-from visitors import MementoVisitor, DistanceVisitor
-from framework_integration import RealTurtleAdapter  # optional
+from .lexer import tokenize
+from .parser import Parser
+from .interpreter import Interpreter
+from .turtle_core import MockTurtle
+from .visitors import MementoVisitor, DistanceVisitor
+from .framework_integration import RealTurtleAdapter
+
 
 def run_program_text(source: str):
     tokens = tokenize(source)
@@ -50,6 +50,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         run_program_file(sys.argv[1])
     else:
+        print("No input file. Executing Demo...")
         demo_source = "REPEAT 4 [ FORWARD 100 RIGHT 90 ]"
         run_program_text(demo_source)
 
