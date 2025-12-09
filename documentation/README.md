@@ -11,9 +11,14 @@ Leo Paredes, Brandon Reynolds
 
 You can run the interpreter from the root directory by passing a turtle program file as a command line argument. All turtle programs can be found in the 'turtle_programs' directory. 
 
-## Running the Interpreter
+## Running the Interpreter using the GUI
 
-You can run the interpreter with a custom gui as well. This gui will allow users to load in text files with the instructions to help navigate a turtle.
+You can run the interpreter with a custom gui as well. This gui will allow you to load in text files with the commands to help navigate their turtle. The GUI serves multiple purposes such as:
+- Code editor (Load/Save)
+- Execution Controls
+- Turtle Canvas for turtle graphics
+- Execution Info Panel
+- Export functionality with PNG images
 
 ### Basic Usage
 

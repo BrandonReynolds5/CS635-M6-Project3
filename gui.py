@@ -88,15 +88,6 @@ def export_canvas_png(canvas, filename="turtle_output.png"):
     except Exception as e:
         messagebox.showerror("Export PNG Error", str(e))
 
-def export_canvas_svg(canvas, filename="turtle_output.svg"):
-    try:
-        import cairosvg
-        ps = canvas.postscript(colormode='color')
-        cairosvg.svg2svg(bytestring=ps.encode(), write_to=filename)
-        messagebox.showinfo("Export SVG", f"Saved {filename}")
-    except Exception as e:
-        messagebox.showerror("Export SVG Error", str(e))
-
 # ===================== Main GUI =====================
 class TurtleIDE(tk.Tk):
     def __init__(self):
@@ -164,7 +155,6 @@ class TurtleIDE(tk.Tk):
         self.step_label.grid(row=3, column=0, sticky="w")
 
         ttk.Button(stats_frame, text="Export PNG", command=lambda: export_canvas_png(self.tk_canvas)).grid(row=4, column=0, pady=2, sticky="w")
-        ttk.Button(stats_frame, text="Export SVG", command=lambda: export_canvas_svg(self.tk_canvas)).grid(row=5, column=0, pady=2, sticky="w")
 
     # ---------------- File I/O ----------------
     def load_file(self):
