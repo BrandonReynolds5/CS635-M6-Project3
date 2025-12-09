@@ -12,7 +12,7 @@ from src.turtle_core import MockTurtle
 from src.visitors import MementoVisitor, DistanceVisitor
 from src.framework_integration import RealTurtleAdapter
 
-# ===================== Theme & Colors =====================
+# Theme and Colors
 DARK_BG = "#1e1e1e"
 DARK_FG = "#d4d4d4"
 TURTLE_COLOR = '#008000'
@@ -20,7 +20,7 @@ HIGHLIGHT = "#569cd6"
 NUMBER_COLOR = "#b5cea8"
 KEYWORDS = ["REPEAT", "FORWARD", "FD", "RIGHT", "RT", "LEFT", "LT", "PENUP", "PENDOWN"]
 
-# ===================== Custom Code Editor =====================
+# Code Editor that will be used for commands
 class CodeEditor(ScrolledText):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -47,7 +47,7 @@ class CodeEditor(ScrolledText):
         self.tag_config("number", foreground=NUMBER_COLOR)
         self.edit_modified(False)
 
-# ===================== Zoom & Pan Canvas =====================
+# Zoom implementation and canvas
 class ZoomPanCanvas(tk.Canvas):
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -73,7 +73,7 @@ class ZoomPanCanvas(tk.Canvas):
         self.scale_factor *= factor
         self.scale("all", event.x, event.y, factor, factor)
 
-# ===================== Export Utilities =====================
+# Export utilities for png export
 def export_canvas_png(canvas, filename="turtle_output.png"):
     try:
         from PIL import ImageGrab
@@ -88,7 +88,7 @@ def export_canvas_png(canvas, filename="turtle_output.png"):
     except Exception as e:
         messagebox.showerror("Export PNG Error", str(e))
 
-# ===================== Main GUI =====================
+# Main GUI that is used to interact with turtle graphics langauge
 class TurtleIDE(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -101,7 +101,7 @@ class TurtleIDE(tk.Tk):
 
         self.create_layout()
 
-    # ---------------- Layout ----------------
+    # Layout
     def create_layout(self):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=2)
@@ -136,14 +136,14 @@ class TurtleIDE(tk.Tk):
         self.screen = turtle.TurtleScreen(self.tk_canvas)
         self.screen.tracer(0)
 
-        # Create a RawTurtle as the "turtle icon"
+        # Create a RawTurtle as the "turtle icon", green color for turtle
         self.real_turtle = turtle.RawTurtle(self.screen)
         self.real_turtle.shape("turtle")
         self.real_turtle.showturtle()
         self.real_turtle.speed(0)
         self.real_turtle.color(TURTLE_COLOR)
 
-        # Stats Panel
+        # Stats Panel with disance, status, what step currently on, etc.
         stats_frame = tk.Frame(canvas_frame, bg=DARK_BG)
         stats_frame.grid(row=1, column=0, sticky="nsew", pady=6)
         tk.Label(stats_frame, text="Execution Info", bg=DARK_BG, fg=DARK_FG, font=("Segoe UI", 12, "bold")).grid(row=0, column=0, sticky="w")
@@ -156,7 +156,7 @@ class TurtleIDE(tk.Tk):
 
         ttk.Button(stats_frame, text="Export PNG", command=lambda: export_canvas_png(self.tk_canvas)).grid(row=4, column=0, pady=2, sticky="w")
 
-    # ---------------- File I/O ----------------
+    # File I/O
     def load_file(self):
         f = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")])
         if not f: return
@@ -170,14 +170,14 @@ class TurtleIDE(tk.Tk):
         with open(f, "w") as file:
             file.write(self.editor.get("1.0", tk.END))
 
-    # ---------------- Parsing ----------------
+    # Parsing
     def parse_program(self):
         source = self.editor.get("1.0", tk.END)
         tokens = tokenize(source)
         parser = Parser(tokens)
         return parser.parse()
 
-    # ---------------- Run ----------------
+    # Run
     def run_program(self):
         self.status_label.config(text="Status: Running...")
         self.real_turtle.reset()
@@ -207,7 +207,7 @@ class TurtleIDE(tk.Tk):
         # Schedule next statement
         self.after(50, lambda: self._run_program_steps(interp, program, index + 1))
 
-    # ---------------- Step Mode ----------------
+    # Step Mode
     def reset_steps(self):
         self.real_turtle.reset()
         self.real_turtle.color(TURTLE_COLOR)
@@ -247,7 +247,7 @@ class TurtleIDE(tk.Tk):
         self.step_label.config(text=f"Step: {self.step_index} / {len(self.mementos)}")
         self.status_label.config(text="Status: Stepping...")
 
-# ===================== Main =====================
+# Main
 if __name__ == "__main__":
     app = TurtleIDE()
     app.mainloop()
