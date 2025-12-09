@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from tkinter.scrolledtext import ScrolledText
 import turtle
-import threading
 import re
 import os
 
@@ -16,6 +15,7 @@ from src.framework_integration import RealTurtleAdapter
 # ===================== Theme & Colors =====================
 DARK_BG = "#1e1e1e"
 DARK_FG = "#d4d4d4"
+TURTLE_COLOR = '#008000'
 HIGHLIGHT = "#569cd6"
 NUMBER_COLOR = "#b5cea8"
 KEYWORDS = ["REPEAT", "FORWARD", "FD", "RIGHT", "RT", "LEFT", "LT", "PENUP", "PENDOWN"]
@@ -150,6 +150,7 @@ class TurtleIDE(tk.Tk):
         self.real_turtle.shape("turtle")
         self.real_turtle.showturtle()
         self.real_turtle.speed(0)
+        self.real_turtle.color(TURTLE_COLOR)
 
         # Stats Panel
         stats_frame = tk.Frame(canvas_frame, bg=DARK_BG)
@@ -190,24 +191,36 @@ class TurtleIDE(tk.Tk):
     def run_program(self):
         self.status_label.config(text="Status: Running...")
         self.real_turtle.reset()
+        self.real_turtle.color(TURTLE_COLOR)
         self.screen.update()
 
-        def run_thread():
-            try:
-                program = self.parse_program()
-                adapter = RealTurtleAdapter(self.real_turtle)
-                interp = Interpreter(adapter)
-                interp.execute(program)
-                self.screen.update()
-                self.status_label.config(text="Status: Finished")
-            except Exception as e:
-                self.status_label.config(text=f"Error: {e}")
+        try:
+            program = self.parse_program()
+            adapter = RealTurtleAdapter(self.real_turtle)
+            interp = Interpreter(adapter)
 
-        threading.Thread(target=run_thread).start()
+            # Run step by step using after() for main-thread safety
+            self._run_program_steps(interp, program, 0)
+        except Exception as e:
+            self.status_label.config(text=f"Error: {e}")
+
+    def _run_program_steps(self, interp, program, index):
+        if index >= len(program):
+            self.screen.update()
+            self.status_label.config(text="Status: Finished")
+            return
+
+        # Execute one statement
+        interp.execute_node(program[index])
+        self.screen.update()
+
+        # Schedule next statement
+        self.after(50, lambda: self._run_program_steps(interp, program, index + 1))
 
     # ---------------- Step Mode ----------------
     def reset_steps(self):
         self.real_turtle.reset()
+        self.real_turtle.color(TURTLE_COLOR)
         self.screen.update()
         self.mementos = []
         self.step_index = 0
