@@ -13,10 +13,10 @@ class RealTurtleState:
 
 class RealTurtleAdapter:
     """
-    Adapter that wraps the real turtle.Turtle so it can be used
-    with Interpreter and Visitors like the MockTurtle.
+    Adapter that wraps the real turtle.Turtle or RawTurtle so it can be used
+    with Interpreter and Visitors like the MockTurtle. If t is None, creates a new Turtle.
     """
-    def __init__(self):
+    def __init__(self, t=None):
         self.t = turtle.Turtle()
         self.pen_is_down = True
 

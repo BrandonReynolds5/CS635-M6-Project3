@@ -11,15 +11,23 @@ Leo Paredes, Brandon Reynolds
 
 You can run the interpreter from the root directory by passing a turtle program file as a command line argument. All turtle programs can be found in the 'turtle_programs' directory. 
 
+## Running the Interpreter
+
+You can run the interpreter with a custom gui as well. This gui will allow users to load in text files with the instructions to help navigate a turtle.
+
 ### Basic Usage
 
+Command Line:
 python main.py <turtle_program>
+
+GUI:
+python gui.py
 
 ### Example
 python main.py turtle_programs/square.txt
 
 ### Running Without Arguments 
-If you run the interpreter without providing a program file, a simple demo program will be executed automatically. 
+If you run the interpreter through command line without providing a program file, a simple demo program will be executed automatically. 
 
 ## Running the Test Suite
 
