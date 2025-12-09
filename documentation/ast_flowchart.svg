@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="700" height="900" xmlns="http://www.w3.org/2000/svg">
+
+  <style>
+    .node { fill:#e8f0ff; stroke:#2a4b8d; stroke-width:1.5; }
+    .text { font-family:Arial; font-size:16px; text-anchor:middle; dominant-baseline:middle; }
+    .arrow { stroke:#000; stroke-width:2; marker-end:url(#arrowhead); }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" 
+            refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" />
+    </marker>
+  </defs>
+
+  <!-- Program Node -->
+  <rect x="250" y="20" width="200" height="50" class="node"/>
+  <text x="350" y="45" class="text">Program</text>
+
+  <!-- Repeat Node -->
+  <line x1="350" y1="70" x2="350" y2="120" class="arrow"/>
+  <rect x="225" y="120" width="250" height="60" class="node"/>
+  <text x="350" y="150" class="text">Repeat (count = 4)</text>
+
+  <!-- Body arrows -->
+  <line x1="350" y1="180" x2="350" y2="220" class="arrow"/>
+
+  <!-- Forward 100 -->
+  <rect x="225" y="220" width="250" height="50" class="node"/>
+  <text x="350" y="245" class="text">Forward 100</text>
+
+  <line x1="350" y1="270" x2="350" y2="310" class="arrow"/>
+
+  <!-- Right 90 -->
+  <rect x="225" y="310" width="250" height="50" class="node"/>
+  <text x="350" y="335" class="text">Right 90</text>
+
+  <!-- Continue program -->
+  <line x1="350" y1="360" x2="350" y2="410" class="arrow"/>
+
+  <!-- Left 45 -->
+  <rect x="225" y="410" width="250" height="50" class="node"/>
+  <text x="350" y="435" class="text">Left 45</text>
+
+  <line x1="350" y1="460" x2="350" y2="510" class="arrow"/>
+
+  <!-- Forward 141 -->
+  <rect x="225" y="510" width="250" height="50" class="node"/>
+  <text x="350" y="535" class="text">Forward 141</text>
+
+  <line x1="350" y1="560" x2="350" y2="610" class="arrow"/>
+
+  <!-- PenUp -->
+  <rect x="225" y="610" width="250" height="50" class="node"/>
+  <text x="350" y="635" class="text">PenUp</text>
+
+  <line x1="350" y1="660" x2="350" y2="710" class="arrow"/>
+
+  <!-- Forward 10 -->
+  <rect x="225" y="710" width="250" height="50" class="node"/>
+  <text x="350" y="735" class="text">Forward 10</text>
+
+  <line x1="350" y1="760" x2="350" y2="810" class="arrow"/>
+
+  <!-- PenDown -->
+  <rect x="225" y="810" width="250" height="50" class="node"/>
+  <text x="350" y="835" class="text">PenDown</text>
+
+</svg>
