@@ -1,5 +1,3 @@
-# parser.py
-
 from .ast_nodes import Forward, Left, Right, PenUp, PenDown, Repeat
 
 # Converts tokens into an AST, creating a tree of nodes like Forward, Left, Repeat.

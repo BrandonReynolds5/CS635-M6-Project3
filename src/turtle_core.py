@@ -1,5 +1,3 @@
-# turtle_core.py
-
 import math
 from dataclasses import dataclass
 

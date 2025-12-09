@@ -1,6 +1,3 @@
-# real turtle adapter
-# framework_integration.py
-
 import turtle
 from dataclasses import dataclass
 

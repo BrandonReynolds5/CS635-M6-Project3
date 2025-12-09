@@ -1,5 +1,3 @@
-# visitors.py
-
 from .turtle_core import MockTurtle
 
 class MementoVisitor:

@@ -1,5 +1,3 @@
-# ast_nodes.py
-
 class Node:
     def accept(self, visitor):
         """Visitor pattern: call visitor.visit_<ClassName>(self)."""

@@ -1,21 +1,19 @@
-# tests/test_visitors.py
-
 from src.lexer import tokenize
 from src.parser import Parser
 from src.turtle_core import MockTurtle
 from src.visitors import MementoVisitor, DistanceVisitor
 
-
+# Build program
 def build_program(source: str):
     tokens = tokenize(source)
     parser = Parser(tokens)
     return parser.parse()
 
-
+# Test for almost equal
 def almost_equal(a: float, b: float, eps: float = 1e-6):
     return abs(a - b) < eps
 
-
+# Test distance visitor with a square
 def test_distance_visitor_square():
     source = "REPEAT 4 [ FORWARD 100 RIGHT 90 ]"
     program = build_program(source)
@@ -27,7 +25,7 @@ def test_distance_visitor_square():
     # Four sides of length 100
     assert visitor.total_distance == 400.0
 
-
+# Test memento works
 def test_memento_visitor_steps():
     source = "FORWARD 50 RIGHT 90 FORWARD 50"
     program = build_program(source)

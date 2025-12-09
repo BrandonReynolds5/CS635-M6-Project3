@@ -1,5 +1,3 @@
-# interpreter.py
-
 from .turtle_core import MockTurtle
 from .ast_nodes import Forward, Left, Right, PenUp, PenDown, Repeat
 

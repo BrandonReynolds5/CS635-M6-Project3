@@ -1,16 +1,14 @@
-# tests/test_parser.py
-
 from src.lexer import tokenize
 from src.parser import Parser
 from src.ast_nodes import Forward, Left, Right, PenUp, PenDown, Repeat
 
-
+# Test for parsing
 def parse_program(source: str):
     tokens = tokenize(source)
     parser = Parser(tokens)
     return parser.parse()
 
-
+# Test for parsing with forward
 def test_parse_single_forward():
     program = parse_program("FORWARD 100")
     assert len(program) == 1
@@ -18,7 +16,7 @@ def test_parse_single_forward():
     assert isinstance(stmt, Forward)
     assert stmt.distance == 100.0
 
-
+# Test for parsing with repeat
 def test_parse_repeat_block():
     source = "REPEAT 4 [ FORWARD 50 RIGHT 90 ]"
     program = parse_program(source)

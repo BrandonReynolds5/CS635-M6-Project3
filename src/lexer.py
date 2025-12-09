@@ -1,5 +1,3 @@
-# lexer.py
-
 def tokenize(source: str):
     """Turn the source string into a simple list of tokens."""
     tokens = []
